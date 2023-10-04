@@ -1,5 +1,8 @@
 import { useForm } from "react-hook-form";
 import InputMask from "react-input-mask";
+import { useAuth } from "../../hooks/AuthHook";
+import { useEffect } from "react";
+import { AuthService } from "../../services/AuthService";
 
 export const LoginPage = () => {
   const {
@@ -8,9 +11,22 @@ export const LoginPage = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const { login } = useAuth();
+
+  const onSubmit = async (data) => {
+    const body = { ...data, login: data.login.replace(/[^\w]/g, "") };
+    await login(body);
   };
+
+  useEffect(() => {
+    const asyncFn = async () => {
+      await AuthService.Get(async (response) => {
+        !!response && (await login({ login: response.data }));
+      });
+    };
+
+    asyncFn();
+  }, []);
 
   return (
     <div>

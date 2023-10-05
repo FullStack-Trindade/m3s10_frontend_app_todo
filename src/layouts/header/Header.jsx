@@ -6,10 +6,10 @@ export const Header = () => {
 
   return (
     <header>
-      <h1>{user().email}</h1>
       <Link to="/">Home</Link>
       <Link to="/todo">Cadastar Tarefa</Link>
 
+      <h1>{user().email}</h1>
       <button>Sair</button>
     </header>
   );
